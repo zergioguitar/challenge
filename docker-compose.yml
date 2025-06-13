@@ -1,0 +1,53 @@
+services:
+  redis:
+      image: redis:7
+      ports:
+        - "6379:6379"
+      networks:
+        - tenpo-net
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: challenge
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - tenpo-net
+
+  mock-api:
+    image: vimagick/json-server
+    command: -h 0.0.0.0 -p 3000 -w db.json
+    container_name: mock-api
+    ports:
+      - "3000:3000"
+    networks:
+      - tenpo-net
+    volumes:
+      - ./mocks:/data
+    restart: always
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tenpo-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+      - mock-api
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/challenge
+      DB_USER: user
+      DB_PASS: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PERCENTAGE_URL: http://mock-api:3000/percentage
+    networks:
+      - tenpo-net
+
+networks:
+  tenpo-net:
+    driver: bridge
