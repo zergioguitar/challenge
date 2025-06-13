@@ -44,7 +44,7 @@ cd tenpo-challenge
 2. Build and run the containers:
 
 ```bash
-docker-compose -f docker/docker-compose.yml up --build
+docker compose up --build
 ```
 
 This will start:
