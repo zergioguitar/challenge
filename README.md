@@ -37,8 +37,8 @@ This application includes a `docker` folder that contains everything you need to
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/tenpo-challenge.git
-cd tenpo-challenge
+git clone https://github.com/zergioguitar/challenge.git
+cd challenge
 ```
 
 2. Build and run the containers:
